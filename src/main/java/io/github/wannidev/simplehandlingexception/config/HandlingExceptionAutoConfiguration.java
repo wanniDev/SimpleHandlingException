@@ -12,6 +12,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import io.github.wannidev.simplehandlingexception.ErrorResponseComposer;
+import io.github.wannidev.simplehandlingexception.advice.DefaultExceptionHandlerControllerAdvice;
 import io.github.wannidev.simplehandlingexception.hanlder.AbstractExceptionHandler;
 import io.github.wannidev.simplehandlingexception.util.SimpleMessageUtils;
 import io.github.wannidev.simplehandlingexception.validator.SimpleValidator;
@@ -48,6 +49,15 @@ public class HandlingExceptionAutoConfiguration {
 		List<AbstractExceptionHandler<T>> handlers) {
 		log.info("Configuring ErrorResponseComposer");
 		return new ErrorResponseComposer<T>(handlers);
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(DefaultExceptionHandlerControllerAdvice.class)
+	public <T extends Throwable>
+	DefaultExceptionHandlerControllerAdvice<T> defaultExceptionHandlerControllerAdvice(ErrorResponseComposer<T> errorResponseComposer) {
+
+		log.info("Configuring DefaultExceptionHandlerControllerAdvice");
+		return new DefaultExceptionHandlerControllerAdvice<T>(errorResponseComposer);
 	}
 
 	@Bean
