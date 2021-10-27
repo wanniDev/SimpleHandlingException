@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguratio
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -23,35 +24,10 @@ import io.github.wannidev.simplehandlingexception.util.SimpleMessageUtils;
 import io.github.wannidev.simplehandlingexception.validator.SimpleValidator;
 
 @Configuration
-@AutoConfigureBefore({
-	WebMvcAutoConfiguration.class,
-	ErrorMvcAutoConfiguration.class,
-	SecurityAutoConfiguration.class,
-	SecurityFilterAutoConfiguration.class})
+@ComponentScan(basePackageClasses=AbstractExceptionHandler.class)
 public class HandlingExceptionAutoConfiguration {
 
 	private static final Log log = LogFactory.getLog(HandlingExceptionAutoConfiguration.class);
-
-	@Bean
-	@ConditionalOnMissingBean(MessageSource.class)
-	public MessageSource messageSource() {
-		ReloadableResourceBundleMessageSource messageSource
-			= new ReloadableResourceBundleMessageSource();
-
-		messageSource.setBasename("classpath:messages");
-		messageSource.setDefaultEncoding("UTF-8");
-		return messageSource;
-	}
-
-	@Bean
-	@ConditionalOnMissingBean(LocalValidatorFactoryBean.class)
-	public LocalValidatorFactoryBean localValidatorFactoryBean(MessageSource messageSource) {
-
-		LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
-
-		bean.setValidationMessageSource(messageSource);
-		return bean;
-	}
 
 	@Bean
 	@ConditionalOnMissingBean(ErrorResponseComposer.class)
@@ -71,7 +47,6 @@ public class HandlingExceptionAutoConfiguration {
 	}
 
 	@Bean
-	@ConditionalOnMissingBean(SimpleMessageUtils.class)
 	public SimpleMessageUtils simpleValidateUtils(MessageSource messageSource) {
 
 		log.info("Configuring SimpleMessageUtils");
@@ -79,7 +54,6 @@ public class HandlingExceptionAutoConfiguration {
 	}
 
 	@Bean
-	@ConditionalOnMissingBean(SimpleValidator.class)
 	public SimpleValidator simpleValidator(LocalValidatorFactoryBean localValidatorFactoryBean) {
 
 		log.info("Configuring simpleValidator");
