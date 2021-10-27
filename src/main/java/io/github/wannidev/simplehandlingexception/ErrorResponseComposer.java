@@ -32,7 +32,8 @@ public class ErrorResponseComposer<T extends Throwable> {
 	/**
 	 * 예외가 주어지면, 핸들러를 찾는다.
 	 * 핸들러를 통해 응답 메세지를 빌드하고, 리턴한다.
-	 * @param exception 서비스 로직에 의해 발생한 예외
+	 * @param exception 서비스 로직에 의해 발생한 예외.
+	 * @return errorResponse
 	 */
 	public Optional<ErrorResponse> compose(T exception) {
 

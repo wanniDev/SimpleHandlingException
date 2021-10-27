@@ -4,7 +4,12 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +23,11 @@ import io.github.wannidev.simplehandlingexception.util.SimpleMessageUtils;
 import io.github.wannidev.simplehandlingexception.validator.SimpleValidator;
 
 @Configuration
+@AutoConfigureBefore({
+	WebMvcAutoConfiguration.class,
+	ErrorMvcAutoConfiguration.class,
+	SecurityAutoConfiguration.class,
+	SecurityFilterAutoConfiguration.class})
 public class HandlingExceptionAutoConfiguration {
 
 	private static final Log log = LogFactory.getLog(HandlingExceptionAutoConfiguration.class);
