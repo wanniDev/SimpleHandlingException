@@ -26,8 +26,6 @@ public class ErrorResponseComposer<T extends Throwable> {
 					.INSTANCE.compare(handler1, handler2) < 0 ?
 					handler1 : handler2));
 
-		System.out.println("씨발 : " + this.handlers.get(RuntimeException.class.getSimpleName()));
-
 		log.info("Created");
 	}
 
