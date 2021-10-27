@@ -10,7 +10,7 @@
     </parent>
     <groupId>io.github.wannidev</groupId>
     <artifactId>simplehandlingexception</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>simple handling exception</name>
     <description>A simple library for Handling Exception for Error Response message based on Spring boot.</description>
     <properties>
