@@ -10,7 +10,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
-import io.github.wannidev.simplehandlingexception.advice.DefaultExceptionHandlerControllerAdvice;
 import io.github.wannidev.simplehandlingexception.hanlder.AbstractExceptionHandler;
 
 public class ErrorResponseComposer<T extends Throwable> {
@@ -33,30 +32,31 @@ public class ErrorResponseComposer<T extends Throwable> {
 	/**
 	 * 예외가 주어지면, 핸들러를 찾는다.
 	 * 핸들러를 통해 응답 메세지를 빌드하고, 리턴한다.
+	 * @param exception 서비스 로직에 의해 발생한 예외
 	 */
-	public Optional<ErrorResponse> compose(T ex) {
+	public Optional<ErrorResponse> compose(T exception) {
 
 		AbstractExceptionHandler<T> handler = null;
 
 		// 예외를 다루는 핸들러는 조회하는데, 핸들러를 못찾으면,
-		// ex.getCause()를 통해 그 예외 자체를 할당한다.
-		while (ex != null) {
+		// exception.getCause()를 통해 그 예외 자체를 할당한다.
+		while (exception != null) {
 
-			handler = handlers.get(ex.getClass().getSimpleName());
+			handler = handlers.get(exception.getClass().getSimpleName());
 
 			if (handler != null) {
 				break;
 			}
 
-			if (RuntimeException.class.isAssignableFrom(ex.getClass())) {
+			if (RuntimeException.class.isAssignableFrom(exception.getClass())) {
 				handler = handlers.get(RuntimeException.class.getSimpleName());
 			}
 
-			ex = (T) ex.getCause();
+			exception = (T) exception.getCause();
 		}
 
 		if (handler != null) {
-			return Optional.of(handler.getErrorResponse(ex));
+			return Optional.of(handler.getErrorResponse(exception));
 		}
 
 		return Optional.empty();
